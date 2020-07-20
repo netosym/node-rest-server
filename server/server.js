@@ -1,6 +1,7 @@
 require('./config/config');
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 const app = express();
 
 //BODY PARSER
@@ -32,6 +33,19 @@ app.put('/usuario/:id', (req, res) => {
     id,
   });
 });
+
+//DB CONNECTION
+mongoose.connect(
+  'mongodb://localhost:27017/cafe',
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  },
+  (error) => {
+    if (error) throw error;
+    console.log('DB connected!');
+  }
+);
 
 app.listen(process.env.PORT, () => {
   console.log(`listening port ${process.env.PORT}`);

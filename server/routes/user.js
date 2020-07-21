@@ -1,21 +1,34 @@
-const express = require('express')
+const express = require('express');
+const User = require('../models/user')
 
-const userRouter = express()
+const userRouter = express();
 
 userRouter.get('/', (req, res) => {
   res.json('Welcome to Users');
 });
 
-userRouter.post('/', (req, res) => {
-  let body = req.body;
-  if (body.nombre) {
-    res.json({ body });
-  } else {
+userRouter.post('/', async (req, res) => {
+
+  try {
+    let user = new User({
+      name: req.body.name,
+      email: req.body.email,
+      password: req.body.password,
+      role: req.body.role
+    })
+  
+    const savedUser = await user.save()
+    res.json({
+      ok:true,
+      user: savedUser
+    })
+  } catch (error) {
     res.status(400).json({
       ok: false,
-      mensaje: 'El nombre es necesario',
-    });
+      message: error
+    })
   }
+
 });
 
 userRouter.put('/:id', (req, res) => {
@@ -26,10 +39,10 @@ userRouter.put('/:id', (req, res) => {
 });
 
 userRouter.delete('/:id', (req, res) => {
-  let id = req.params.id
+  let id = req.params.id;
   res.json({
     id,
   });
-})
+});
 
-module.exports = userRouter
+module.exports = userRouter;

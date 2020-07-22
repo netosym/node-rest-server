@@ -53,4 +53,12 @@ userSchema.plugin(uniqueValidator, {
   message: '{PATH} should be unique',
 });
 
+//NOT PASS PASSWORD IN THE RESPONSE - No se usa arrow functions porque se necesita el valor de this
+userSchema.methods.toJSON = function () {
+  let user = this;
+  let userObject = user.toObject();
+  delete userObject.password;
+  return userObject;
+};
+
 module.exports = mongoose.model('users', userSchema);

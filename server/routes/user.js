@@ -5,8 +5,24 @@ const User = require('../models/user');
 
 const userRouter = express();
 
-userRouter.get('/', (req, res) => {
-  res.json('Welcome to Users');
+userRouter.get('/', async (req, res) => {
+  try {
+    let from = Number(req.query.from) || 0;
+    let limit = Number(req.query.limit) || 5;
+    const foundUsers = await User.find({}, 'name email role google state image').skip(from).limit(limit).exec();
+    // const count = await User.count({name: 'Elvira'})
+    const count = foundUsers.length;
+    res.json({
+      ok: true,
+      users: foundUsers,
+      count,
+    });
+  } catch (error) {
+    res.status(400).json({
+      ok: false,
+      message: error,
+    });
+  }
 });
 
 userRouter.post('/', async (req, res) => {
@@ -46,11 +62,11 @@ userRouter.put('/:id', async (req, res) => {
       new: true,
       runValidators: true,
     });
-    if(!updatedUser) {
+    if (!updatedUser) {
       return res.status(404).json({
         ok: false,
-        message: 'User not found'
-      })
+        message: 'User not found',
+      });
     }
     res.json({
       ok: true,

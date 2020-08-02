@@ -21,7 +21,7 @@ app.use('/users', userRoute)
 
 //DB CONNECTION
 mongoose.connect(
-  'mongodb://localhost:27017/cafe',
+  process.env.MONGO_URI,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,

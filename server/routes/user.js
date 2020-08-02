@@ -5,13 +5,17 @@ const User = require('../models/user');
 
 const userRouter = express();
 
+//GET REQUEST
 userRouter.get('/', async (req, res) => {
   try {
     let from = Number(req.query.from) || 0;
     let limit = Number(req.query.limit) || 5;
-    const foundUsers = await User.find({}, 'name email role google state image').skip(from).limit(limit).exec();
-    // const count = await User.count({name: 'Elvira'})
-    const count = foundUsers.length;
+    const foundUsers = await User.find({ state: true })
+      .skip(from)
+      .limit(limit)
+      .exec();
+    const count = await User.countDocuments({ state: true });
+    // const count = foundUsers.length;
     res.json({
       ok: true,
       users: foundUsers,
@@ -25,6 +29,7 @@ userRouter.get('/', async (req, res) => {
   }
 });
 
+//POST REQUEST
 userRouter.post('/', async (req, res) => {
   try {
     let user = new User({
@@ -48,6 +53,7 @@ userRouter.post('/', async (req, res) => {
   }
 });
 
+//PUT REQUEST
 userRouter.put('/:id', async (req, res) => {
   try {
     let id = req.params.id;
@@ -80,11 +86,33 @@ userRouter.put('/:id', async (req, res) => {
   }
 });
 
+//DELETE REQUEST
 userRouter.delete('/:id', async (req, res) => {
-  let id = req.params.id;
-  res.json({
-    id,
-  });
+  try {
+    let id = req.params.id;
+    const removedUser = await User.findByIdAndUpdate(
+      id,
+      { state: false },
+      {
+        new: true,
+      }
+    );
+    if (!removedUser) {
+      return res.status(404).json({
+        ok: false,
+        message: 'User not found',
+      });
+    }
+    res.json({
+      ok: true,
+      removedUser,
+    });
+  } catch (error) {
+    res.status(400).json({
+      ok: false,
+      message: error,
+    });
+  }
 });
 
 module.exports = userRouter;

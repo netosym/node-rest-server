@@ -1,5 +1,6 @@
 const express = require('express');
 const bcript = require('bcrypt');
+const jwt = require('jsonwebtoken')
 const User = require('../models/user');
 
 const loginRouter = express();
@@ -22,10 +23,14 @@ loginRouter.post('/', async (req, res) => {
       });
     }
 
+    let token = jwt.sign({
+      user: foundUser
+    }, process.env.SEED, {expiresIn: process.env.TOKEN_EXP})
+
     res.json({
       ok: true,
       user: foundUser,
-      token: '213',
+      token,
     });
   } catch (error) {
     res.status(500).json({

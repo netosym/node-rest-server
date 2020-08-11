@@ -1,12 +1,13 @@
 const express = require('express');
 const bcript = require('bcrypt');
+const { authToken } = require('../middlewares/auth');
 const _ = require('underscore');
 const User = require('../models/user');
 
 const userRouter = express();
 
 //GET REQUEST
-userRouter.get('/', async (req, res) => {
+userRouter.get('/', authToken, async (req, res) => {
   try {
     let from = Number(req.query.from) || 0;
     let limit = Number(req.query.limit) || 5;
@@ -30,7 +31,7 @@ userRouter.get('/', async (req, res) => {
 });
 
 //POST REQUEST
-userRouter.post('/', async (req, res) => {
+userRouter.post('/', authToken, async (req, res) => {
   try {
     let user = new User({
       name: req.body.name,
@@ -54,7 +55,7 @@ userRouter.post('/', async (req, res) => {
 });
 
 //PUT REQUEST
-userRouter.put('/:id', async (req, res) => {
+userRouter.put('/:id', authToken, async (req, res) => {
   try {
     let id = req.params.id;
     let filteredBody = _.pick(req.body, [
@@ -87,7 +88,7 @@ userRouter.put('/:id', async (req, res) => {
 });
 
 //DELETE REQUEST
-userRouter.delete('/:id', async (req, res) => {
+userRouter.delete('/:id', authToken, async (req, res) => {
   try {
     let id = req.params.id;
     const removedUser = await User.findByIdAndUpdate(

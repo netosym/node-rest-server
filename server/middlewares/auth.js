@@ -11,8 +11,27 @@ const authToken = (req, res, next) => {
         message: 'Invalid Token - Access denied',
       });
     }
-    req.user = validToken.user
+    req.user = validToken.user;
     next();
+  } catch (error) {
+    res.status(400).json({
+      ok: false,
+      message: error,
+    });
+  }
+};
+
+const authAdmin = (req, res, next) => {
+  try {
+    let user = req.user;
+    if (user.role === 'ADMIN_ROLE') {
+      next();
+    } else {
+      return res.status(401).json({
+        ok: false,
+        message: 'You are not an admin',
+      });
+    }
   } catch (error) {
     res.status(400).json({
       ok: false,
@@ -23,4 +42,5 @@ const authToken = (req, res, next) => {
 
 module.exports = {
   authToken,
+  authAdmin
 };

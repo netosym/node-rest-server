@@ -16,7 +16,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 process.env.MONGO_URI = process.env.MONGOATL_URI || 'mongodb://localhost:27017/cafe'
 
 //**********JWT EXPIRATION DATE**********//
-process.env.TOKEN_EXP = 60 * 60 * 24 * 30;
+process.env.TOKEN_EXP = '2 days';
 
 //**********AUTHENTICATION SEED**********//
 process.env.SEED = process.env.SEED || 'secret-development-seed';

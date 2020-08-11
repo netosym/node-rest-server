@@ -1,6 +1,6 @@
 const express = require('express');
 const bcript = require('bcrypt');
-const { authToken } = require('../middlewares/auth');
+const { authToken, authAdmin } = require('../middlewares/auth');
 const _ = require('underscore');
 const User = require('../models/user');
 
@@ -31,7 +31,7 @@ userRouter.get('/', authToken, async (req, res) => {
 });
 
 //POST REQUEST
-userRouter.post('/', authToken, async (req, res) => {
+userRouter.post('/', [authToken, authAdmin], async (req, res) => {
   try {
     let user = new User({
       name: req.body.name,
@@ -55,7 +55,7 @@ userRouter.post('/', authToken, async (req, res) => {
 });
 
 //PUT REQUEST
-userRouter.put('/:id', authToken, async (req, res) => {
+userRouter.put('/:id', [authToken, authAdmin], async (req, res) => {
   try {
     let id = req.params.id;
     let filteredBody = _.pick(req.body, [
@@ -88,7 +88,7 @@ userRouter.put('/:id', authToken, async (req, res) => {
 });
 
 //DELETE REQUEST
-userRouter.delete('/:id', authToken, async (req, res) => {
+userRouter.delete('/:id', [authToken, authAdmin], async (req, res) => {
   try {
     let id = req.params.id;
     const removedUser = await User.findByIdAndUpdate(

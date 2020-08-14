@@ -1,5 +1,6 @@
 require('./config/config');
 const express = require('express');
+const path = require('path')
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const routeConfiguration = require('./routes/index');
@@ -12,10 +13,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //? parse application/json
 app.use(bodyParser.json());
 
+//PUBLIC FILES
+app.use(express.static(path.resolve(__dirname, '../public')));
+console.log(path.resolve(__dirname + '../public'))
 //ROUTES
-app.get('/', (req, res) => {
-  res.json('Welcome to Home');
-});
+// app.get('/', (req, res) => {
+//   res.json('Welcome to Home');
+// });
 
 //ALL ROUTES IN A SINGLE FILE
 app.use(routeConfiguration);

@@ -20,3 +20,6 @@ process.env.TOKEN_EXP = '2 days';
 
 //**********AUTHENTICATION SEED**********//
 process.env.SEED = process.env.SEED || 'secret-development-seed';
+
+//**********GOOGLE CLIENT ID**********//
+process.env.CLIENT_ID = process.env.CLIENT_ID || '711487753754-skioqem7t6mbmnvinfa5k9ndb0e04um9.apps.googleusercontent.com'

@@ -68,6 +68,7 @@ userRouter.put('/:id', [authToken, authAdmin], async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(id, filteredBody, {
       new: true,
       runValidators: true,
+      context: 'query',
     });
     if (!updatedUser) {
       return res.status(404).json({

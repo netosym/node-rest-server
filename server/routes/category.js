@@ -8,7 +8,10 @@ const categoryRouter = express();
 //GET REQUEST - All categories
 categoryRouter.get('/', authToken, async (req, res) => {
   try {
-    const foundCategories = await Category.find({});
+    const foundCategories = await Category.find({})
+      .sort({ name: 1 })
+      .populate('user', 'name email')
+      .exec();
     const count = await Category.countDocuments();
     res.json({
       ok: true,
@@ -47,8 +50,8 @@ categoryRouter.get('/', authToken, async (req, res) => {
 categoryRouter.get('/:id', authToken, async (req, res) => {
   try {
     const id = req.params.id;
-    const categoryId = await Category.findById(id)
-    if(!categoryId) {
+    const categoryId = await Category.findById(id);
+    if (!categoryId) {
       return res.status(404).json({
         ok: false,
         message: 'Category not found',
@@ -91,10 +94,7 @@ categoryRouter.post('/', authToken, async (req, res) => {
 categoryRouter.put('/:id', authToken, async (req, res) => {
   try {
     const id = req.params.id;
-    let filteredBody = _.pick(req.body, [
-      'name',
-      'description',
-    ]);
+    let filteredBody = _.pick(req.body, ['name', 'description']);
     const updatedCategory = await Category.findByIdAndUpdate(id, filteredBody, {
       new: true,
       runValidators: true,

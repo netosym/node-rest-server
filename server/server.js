@@ -15,7 +15,6 @@ app.use(bodyParser.json());
 
 //PUBLIC FILES
 app.use(express.static(path.resolve(__dirname, '../public')));
-console.log(path.resolve(__dirname + '../public'))
 //ROUTES
 // app.get('/', (req, res) => {
 //   res.json('Welcome to Home');

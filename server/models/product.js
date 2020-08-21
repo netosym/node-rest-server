@@ -20,6 +20,10 @@ var productoSchema = new Schema({
     type: String,
     required: false,
   },
+  image: {
+    type: String,
+    required: false,
+  },
   available: {
     type: Boolean,
     required: true,

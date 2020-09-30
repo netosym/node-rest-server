@@ -25,7 +25,7 @@ app.use(routeConfiguration);
 
 //DB CONNECTION
 mongoose.connect(
-  process.env.MONGO_URI,
+  process.env.MONGO_URI, //'mongodb://172.26.160.1:27017/cafe' for WSL2 -- mongod --bind_ip 0.0.0.0 in Windows :)
   { useNewUrlParser: true, useUnifiedTopology: true },
   (error) => {
     if (error) throw error;
